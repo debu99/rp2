@@ -55,6 +55,15 @@ class MiscSingleton {
 		return parseFloat(number.toFixed(ends));
 	}
 
+
+	isNumber(value) {
+		if (typeof value === 'undefined' || value === null || isNaN(value)) {
+			return false;
+		} else {
+			return Number(value);
+		}
+	}
+
 	isValueNumber(value) {
 		if (typeof value !== "number") return false;
 		return true;
@@ -79,6 +88,19 @@ class MiscSingleton {
 			}
 		}
 		return playersInRange;
+	}
+
+	checkPlayerIsNearby(user, range, playerId) {
+		if (!this.isNumber(range) || !this.isNumber(playerId)) return false;
+		const playersInRange = mp.players.toArray();
+		if (!playersInRange) return false;
+		for (const p of playersInRange) {
+			if (user != p && p.guid == playerId && p.dist(user.position) < range) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 
 	getNearestPlayerInRange(position, range) {
