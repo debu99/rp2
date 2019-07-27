@@ -29,7 +29,7 @@ class PlayerSingleton {
     async loadAccount(player, id) {
         const d = await misc.query(`SELECT * FROM users WHERE id = '${id}' LIMIT 1`);
         player.loggedIn = true;
-        player.id = d[0].id;
+        //player.id = d[0].id;
         player.guid = d[0].id;
         player.email = d[0].email;
         player.firstName = d[0].firstName;
