@@ -26,6 +26,8 @@ class LoginSingleton extends AbstractAuth {
             player.loggedIn = false;
             return player.kick('Dublicate');
         }
+        let currentDT = Date.now();
+        misc.query(`Update users set lastlogindate='${currentDT}' where id = '${d[0].id}'`);
         this.loadAccount(player, d[0].id);
     }
 

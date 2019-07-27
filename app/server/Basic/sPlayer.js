@@ -29,11 +29,14 @@ class PlayerSingleton {
     async loadAccount(player, id) {
         const d = await misc.query(`SELECT * FROM users WHERE id = '${id}' LIMIT 1`);
         player.loggedIn = true;
+        player.id = d[0].id;
         player.guid = d[0].id;
         player.email = d[0].email;
         player.firstName = d[0].firstName;
         player.lastName = d[0].lastName;
         player.adminlvl = d[0].adminlvl;
+        player.userexp = d[0].userexp;
+        player.latestdate = Date.now();
         player.lang = d[0].lang;
         player.loyality = d[0].loyality;
         player.updateName();
@@ -81,6 +84,7 @@ class PlayerSingleton {
         player.updateName = function() {
             this.name = `${this.firstName} ${this.lastName}`;
         }
+
         player.tp = function(d) {
             this.position = new mp.Vector3(d.x, d.y, d.z);
             this.heading = d.rot;
@@ -129,6 +133,14 @@ class PlayerSingleton {
         player.saveBasicData = function() {
             const pos = this.getCurrentPos(0.1);
             misc.query(`UPDATE users SET ip = '${this.ip}', logdate = '${new Date().toLocaleString()}', position = '${JSON.stringify(pos)}', health = '${this.health}', loyality = '${this.loyality}' WHERE id = '${this.guid}'`);
+
+            let olddate = this.latestdate;
+            let newdate = Date.now();
+            this.latestdate = newdate;
+            let diffms = (newdate - olddate);
+            let diffMins = Math.round(((diffms - % 86400000) % 3600000) / 60000);
+            misc.query(`UPDATE users SET userexp = userexp + ${diffMins}  WHERE id = '${this.guid}'`);
+            this.userexp = this.userexp + diffMins;
         }
 
         player.isDriver = function() {
