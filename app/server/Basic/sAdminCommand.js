@@ -25,13 +25,12 @@ mp.events.addCommand({
         if (user.adminlvl < 1) return user.outputChatBox("对不起，您无权限使用 /tp");
         console.log('user.guid='+user.guid);
         console.log('playerId='+playerId);
-        let guid = misc.isNumber(playerId);
-        if (!guid && guid!==0) return user.outputChatBox("/tp playerId");
-        let player = misc.getPlayerByGuid(guid);
+        let playerOnlineID = misc.isNumber(playerId);
+        if (!playerOnlineID && playerOnlineID!==0) return user.outputChatBox("/tp playerId");
+        const player = mp.players.at(playerOnlineID);
         console.log(player);
-        if (!player) return user.outputChatBox(`PlayerId ${guid} does not exist!`);
-        console.log(player);
-        console.log('player='+player.guid);
+        if (!player) return user.outputChatBox(`!{200, 0, 0}Player ${playerOnlineID} does not exist!`);
+        console.log('player.guid='+player.guid);
         let player_pos = player.position;
         if (! player_pos) return false;
         user.position = new mp.Vector3(player_pos[0], player_pos[1], player_pos[2]);
@@ -53,18 +52,18 @@ mp.events.addCommand({
         if (user.adminlvl < 1) return;
         //console.log('user.guid='+user.guid);
         //console.log('guid='+guid);
-        let guid = misc.isNumber(playerId);
+        let playerOnlineID = misc.isNumber(playerId);
         let newTarget;
-        if (!guid && guid!==0) {
+        if (!playerOnlineID && playerOnlineID!==0) {
             newTarget = user;
         } else {
-            newTarget = misc.getPlayerByGuid(guid);
+            newTarget = mp.players.at(playerOnlineID);
             //console.log(newTarget);
             if(!newTarget) return user.outputChatBox("There is no player online with the ID given.");
         }
         newTarget.outputChatBox("You have been kicked from the server.");
-        newTarget.kick(`Player: ${guid} got kicked by ${player.guid}`);
-        misc.log.debug(`Player: ${guid} got kicked by ${player.guid}`);
+        newTarget.kick(`Player: ${newTarget.name}[${playerOnlineID}] got kicked by ${user.guid}`);
+        misc.log.debug(`Player: ${newTarget.name}[${playerOnlineID} got kicked by ${user.guid}`);
     },
 
 });

@@ -92,6 +92,48 @@ const moneySingletone = new MoneySingletone();
 module.exports = moneySingletone;
 
 
+
+mp.events.addCommand({	
+	'pay' : async (user, fullText, playerId, amount) => {
+		let tax = 0;
+		let range = 5;
+
+        let playerOnlineID = misc.isNumber(playerId);
+        if (!playerOnlineID && playerOnlineID!==0) return user.outputChatBox(`/pay playerId amount`);
+        let value = misc.isNumber(amount);
+        if (!value || value < 0) return user.outputChatBox(`/pay playerId amount`);
+
+        const player = mp.players.at(playerOnlineID);
+		console.log(player);
+        if (!player) return user.outputChatBox(`!{200, 0, 0}Player ${playerOnlineID} does not exist!`);
+		if (player == user) return user.outputChatBox(`You can't pay to yourself!`);
+		//console.log('after player exist')
+
+
+		console.log('Check_isPlayerNearbyMe');
+		if(!misc.checkPlayerIsNearby(user, range, playerOnlineID)) return user.outputChatBox(`Player ${playerOnlineID} is too far from your position!`);
+		console.log('passed_checkPlayerIsNearby');
+
+		let current_cash = await misc.query(`SELECT cash FROM usersMoney WHERE id = '${user.guid}' LIMIT 1`);
+		if (!current_cash[0] || current_cash[0].cash < value) return user.outputChatBox(`Cash is not enough!`);
+		
+		let current_tax = await misc.query(`SELECT tax FROM usersMoney WHERE id = '${user.guid}' LIMIT 1`);
+		if (!current_tax[0] || current_tax[0].tax < tax) return user.outputChatBox(`Your tax account does not have enough money, need to pay tax ${tax}!`);
+		
+        let player_name = player.firstName + ' ' + player.lastName;
+        let user_name = user.firstName + ' ' + user.lastName;
+		user.payTax(tax,`pay $${value} to user ${player_name} [${player.guid}], tax=${tax}`);
+		user.changeMoney(-value);
+		player.changeMoney(value);
+		user.outputChatBox(`You gave $${value} to ${player_name} [${player.id}]!`);
+		user.outputChatBox(`You pay $${value} tax for paying $${value} to ${player_name} [${player.id}]!`);
+		player.outputChatBox(`${user_name} [${user.id}] gave you $${value}!`);
+		misc.log.info(`${user_name} [${user.guid}] give ${player_name} [${player.guid}] $${value}`);
+		misc.log.info(`${user_name} [${user.guid}] pay tax $${tax} for giving ${player_name} [${player.guid}] $${value}`);
+	},
+
+});
+
 mp.events.addCommand({	
 	'givecash' : (admin, fullText, id, value) => {
 		if (admin.adminLvl < 1) return;

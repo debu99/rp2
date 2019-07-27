@@ -91,11 +91,14 @@ class MiscSingleton {
 	}
 
 	checkPlayerIsNearby(user, range, playerId) {
-		if (!this.isNumber(range) || !this.isNumber(playerId)) return false;
+		if (!this.isNumber(range)) return false;
+        let playerOnlineID = misc.isNumber(playerId);
+        if (!playerOnlineID && playerOnlineID!==0) return false;
+
 		const playersInRange = mp.players.toArray();
 		if (!playersInRange) return false;
 		for (const p of playersInRange) {
-			if (user != p && p.guid == playerId && p.dist(user.position) < range) {
+			if (user != p && p.id == playerId && p.dist(user.position) < range) {
 				return true;
 			} else {
 				return false;

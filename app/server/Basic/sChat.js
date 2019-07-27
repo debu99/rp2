@@ -26,8 +26,8 @@ class ChatSingleton {
 
 			'g' : (player, fullText) => {
 				if (!fullText) return player.notify("Please enter message");
-				mp.players.broadcast(`[${time.getTime()}] [Global] ${player.name}[${player.guid}]: ${fullText}`);
-				misc.log.debug(`${player.name}[${player.guid}] [Global]: ${fullText}`);
+				mp.players.broadcast(`[${time.getTime()}] [Global] ${player.name}[${player.id}]: ${fullText}`);
+				misc.log.debug(`${player.name}[${player.id}] [Global]: ${fullText}`);
 			}, 
 			
 		});
@@ -77,9 +77,9 @@ class ChatSingleton {
 				client.outputChatBox(`!{${color}}[${currentTime}] ${i18n.get('sChat', 'someone', player.lang)}: ${text}`);
 			}
 			else {
-				client.outputChatBox(`!{${color}}[${currentTime}] ${player.name}[${player.guid}] ${text}`);
+				client.outputChatBox(`!{${color}}[${currentTime}] ${player.name}[${player.id}] ${text}`);
 			}
-			misc.log.debug(`${player.name}[${player.guid}] ${text}.`);
+			misc.log.debug(`${player.name}[${player.id}] ${text}.`);
 		});
 	}
 
