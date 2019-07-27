@@ -137,8 +137,7 @@ class PlayerSingleton {
             let olddate = this.latestdate;
             let newdate = Date.now();
             this.latestdate = newdate;
-            let diffms = (newdate - olddate);
-            let diffMins = Math.round(((diffms - % 86400000) % 3600000) / 60000);
+            let diffMins = Math.floor((newdate - olddate) / 60000);
             misc.query(`UPDATE users SET userexp = userexp + ${diffMins}  WHERE id = '${this.guid}'`);
             this.userexp = this.userexp + diffMins;
         }

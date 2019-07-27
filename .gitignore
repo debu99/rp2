@@ -11,3 +11,4 @@ bt.dat
 /client_packages/*
 /app/server/sMysql.js
 /app/server/sMailer.js
+package-lock.json
