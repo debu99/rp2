@@ -138,8 +138,10 @@ class PlayerSingleton {
             let newdate = Date.now();
             this.latestdate = newdate;
             let diffMins = Math.floor((newdate - olddate) / 60000);
-            misc.query(`UPDATE users SET userexp = userexp + ${diffMins}  WHERE id = '${this.guid}'`);
-            this.userexp = this.userexp + diffMins;
+            if (misc.isNumber(diffMins)) {
+                misc.query(`UPDATE users SET userexp = userexp + ${diffMins}  WHERE id = '${this.guid}'`);
+                this.userexp = this.userexp + diffMins;
+            }
         }
 
         player.isDriver = function() {
