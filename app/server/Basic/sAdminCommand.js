@@ -23,17 +23,17 @@ mp.events.addCommand({
    
     'tp': (user, fullText, playerId) => {
         if (user.adminlvl < 1) return user.outputChatBox("对不起，您无权限使用 /tp");
-        console.log('user.guid='+user.guid);
-        console.log('playerId='+playerId);
+        console.log('[tp] user.guid='+user.guid);
+        console.log('[tp] playerId='+playerId);
         let playerOnlineID = misc.isNumber(playerId);
         if (!playerOnlineID && playerOnlineID!==0) return user.outputChatBox("/tp playerId");
         const player = mp.players.at(playerOnlineID);
         console.log(player);
         if (!player) return user.outputChatBox(`!{200, 0, 0}Player ${playerOnlineID} does not exist!`);
-        console.log('player.guid='+player.guid);
+        console.log('[tp] player.guid='+player.guid);
         let player_pos = player.position;
         if (! player_pos) return false;
-        user.position = new mp.Vector3(player_pos[0], player_pos[1], player_pos[2]);
+        user.position = new mp.Vector3(player_pos.x, player_pos.y, player_pos.z);
         let player_name = player.firstName + ' ' + player.lastName;
         let user_name = user.firstName + ' ' + user.lastName;
         misc.log.debug(`Player: ${user_name} tp to ${player_name} at ${player_pos}`);
