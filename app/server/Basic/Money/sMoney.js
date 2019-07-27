@@ -96,7 +96,7 @@ module.exports = moneySingletone;
 mp.events.addCommand({	
 	'pay' : async (user, fullText, playerId, amount) => {
 		let tax = 0;
-		let range = 5;
+		let range = 100;
 
         let playerOnlineID = misc.isNumber(playerId);
         if (!playerOnlineID && playerOnlineID!==0) return user.outputChatBox(`/pay playerId amount`);
